@@ -69,14 +69,15 @@
                   <div class="text-gray-500 text-center mb-3 font-bold">
                     <small>Or sign in with credentials</small>
                   </div>
-                  <form>
+                  <form id="loginForm">
                     <div class="relative w-full mb-3">
                       <label
                         class="block uppercase text-gray-700 text-xs font-bold mb-2"
-                        for="grid-password"
+                        for="username"
                         >Username</label
                       ><input
                         type="text"
+                        id="username"
                         class="border-0 px-3 py-3 placeholder-gray-400 text-gray-700 bg-white rounded text-sm shadow focus:outline-none focus:ring w-full"
                         placeholder="Username"
                         style="transition: all 0.15s ease 0s;"
@@ -85,10 +86,11 @@
                     <div class="relative w-full mb-3">
                       <label
                         class="block uppercase text-gray-700 text-xs font-bold mb-2"
-                        for="grid-password"
+                        for="password"
                         >Password</label
                       ><input
                         type="password"
+                        id="password"
                         class="border-0 px-3 py-3 placeholder-gray-400 text-gray-700 bg-white rounded text-sm shadow focus:outline-none focus:ring w-full"
                         placeholder="Password"
                         style="transition: all 0.15s ease 0s;"
@@ -108,6 +110,7 @@
                     </div>
                     <div class="text-center mt-6">
                       <button
+                        id="submit"
                         class="bg-gray-900 text-white active:bg-gray-700 text-sm font-bold uppercase px-6 py-3 rounded shadow hover:shadow-lg outline-none focus:outline-none mr-1 mb-1 w-full"
                         type="button"
                         style="transition: all 0.15s ease 0s;"
@@ -126,6 +129,10 @@
                       </button>
                     </div>
                   </form>
+                  <div id="loading" class="text-center mt-6" style="display: none;">
+                    Loading...
+                  </div>
+                  <div id="error-message" class="text-center mt-6 text-red-500"></div>
                 </div>
               </div>
               <div class="flex flex-wrap mt-6">
