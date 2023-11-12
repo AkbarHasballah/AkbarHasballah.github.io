@@ -1,43 +1,40 @@
-// signup.js
-
 document.addEventListener("DOMContentLoaded", () => {
-    const loginForm = document.getElementById("loginForm");
-    const loadingMessage = document.getElementById("loading");
+    const usernameInput = document.getElementById("username");
+    const passwordInput = document.getElementById("password");
+    const submitButton = document.getElementById("submit");
+    const registerForm = document.getElementById("loginForm");
     const errorMessage = document.getElementById("error-message");
 
-    loginForm.addEventListener("submit", async (event) => {
+    const loginApiUrl = "https://us-central1-bustling-walker-340203.cloudfunctions.net/function-SIGNREGISGISCOY";
+
+    registerForm.addEventListener("submit", async (event) => {
         event.preventDefault();
 
-        const username = document.getElementById("username").value;
-        const password = document.getElementById("password").value;
+        const username = usernameInput.value;
+        const password = passwordInput.value;
 
-        loadingMessage.style.display = "block";
-        errorMessage.textContent = "";
+        errorMessage.textContent = ""; // Clear previous error message
 
         try {
-            const response = await fetch("https://us-central1-bustling-walker-340203.cloudfunctions.net/function-SIGNREGISGISCOY", {
+            const response = await fetch(loginApiUrl, {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json",
                 },
-                body: JSON.stringify({
-                    username: username,
-                    password: password,
-                }),
+                body: JSON.stringify({ username, password }),
             });
 
-            if (!response.ok) {
-                throw new Error("Login failed. Please check your credentials and try again.");
+            if (response.ok) {
+                alert("Login successful!");
+                // Redirect to dashboard.html
+                window.location.href = "../dashboard/dashboard.html";
+            } else {
+                const data = await response.json();
+                throw new Error(data.message);
             }
-
-            alert("Login successful!");
-            // Redirect to dashboard.html
-            window.location.href = "../dashboard/dashboard.html";
         } catch (error) {
             console.error("Error during login:", error);
             errorMessage.textContent = error.message;
-        } finally {
-            loadingMessage.style.display = "none";
         }
     });
 });
