@@ -1,35 +1,43 @@
-document.addEventListener('DOMContentLoaded', function () {
-    const loginForm = document.querySelector('form');
+// Ambil elemen-elemen HTML yang diperlukan
+const usernameInput = document.getElementById("username");
+const passwordInput = document.getElementById("password");
+const submitButton = document.getElementById("submit");
+const registerForm = document.getElementById("registerForm");
+const errorMessage = document.getElementById("error-message");
 
-    loginForm.addEventListener('submit', async function (event) {
-        event.preventDefault();
+// URL API register
+const registerApiUrl = "https://us-central1-bustling-walker-340203.cloudfunctions.net/function-SIGNREGISGISCOY";
 
-        const username = document.querySelector('#username').value;
-        const password = document.querySelector('#password').value;
+// Tambahkan event listener untuk mengirim permintaan saat formulir dikirim
+registerForm.addEventListener("submit", async (event) => {
+    event.preventDefault(); // Mencegah pengiriman form default
 
-        try {
-            const response = await fetch('https://us-central1-bustling-walker-340203.cloudfunctions.net/function-SIGNREGISGISCOY', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify({
-                    username: username,
-                    password: password,
-                }),
-            });
+    //Ambil nilai dari input username dan password
+    const username = usernameInput.value;
+    const password = passwordInput.value;
 
+    //Kirim permintaan POST ke API register
+    try {
+        const response = await fetch(registerApiUrl, {
+            method: "POST",
+            //mode: "no-cors", // Menggunakan mode no-cors
+            headers: {
+                "Content-Type": "application/json",
+            },
+            body: JSON.stringify({ username, password }),
+        });
+
+        if (response.ok) {
+            // Pendaftaran berhasil, alihkan ke halaman login.html
+            //window.location.href = "../pages/login.html";
+            window.location.href = "../pages/suksesDaftar.html";
+        } else {
+            // Handle kesalahan jika diperlukan
             const data = await response.json();
-
-            if (response.ok) {
-                // Login berhasil, alihkan ke dasbor
-                window.location.href = '../dashboard/dashboard.html';
-            } else {
-                // Login gagal, tampilkan pesan kesalahan
-                console.error('Login gagal:', data);
-            }
-        } catch (error) {
-            console.error('Terjadi kesalahan:', error);
+            //console.error("Gagall mendaftar:", data.message);
+            errorMessage.textContent = data.message; // Menampilkan pesan kesalahan dari API
         }
-    });
+    } catch (error) {
+        console.error("Terjadi kesalahann:", error);
+    }
 });
