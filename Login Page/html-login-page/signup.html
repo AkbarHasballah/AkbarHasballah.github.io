@@ -22,7 +22,7 @@
             <a href="#" class="flex items-center mb-6 text-2xl font-semibold text-gray-900 dark:text-white">
                 <img class="w-8 h-8 mr-2"
                     src="https://flowbite.s3.amazonaws.com/blocks/marketing-ui/logo.svg" alt="logo">
-                Register GIS
+                Flowbite
             </a>
             <div
                 class="w-full bg-white rounded-lg shadow dark:border md:mt-0 sm:max-w-md xl:p-0 dark:bg-gray-800 dark:border-gray-700">
@@ -30,44 +30,11 @@
                     <h1 class="text-xl font-bold leading-tight tracking-tight text-gray-900 md:text-2xl dark:text-white">
                         Create an account
                     </h1>
-                    <form class="space-y-4 md:space-y-6" action="#">
-                        <div>
-                            <label for="email"
-                                class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Your email</label>
-                            <input type="email" name="email" id="email"
-                                class="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                                placeholder="name@company.com" required="">
-                        </div>
-                        <div>
-                            <label for="password"
-                                class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Password</label>
-                            <input type="password" name="password" id="password" placeholder="••••••••"
-                                class="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                                required="">
-                        </div>
-                        <div>
-                            <label for="confirm-password"
-                                class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Confirm password</label>
-                            <input type="password" name="confirm-password" id="confirm-password" placeholder="••••••••"
-                                class="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                                required="">
-                        </div>
-                        <div class="flex items-start">
-                            <div class="flex items-center h-5">
-                                <input id="terms" aria-describedby="terms" type="checkbox"
-                                    class="w-4 h-4 border border-gray-300 rounded bg-gray-50 focus:ring-3 focus:ring-primary-300 dark:bg-gray-700 dark:border-gray-600 dark:focus:ring-primary-600 dark:ring-offset-gray-800"
-                                    required="">
-                            </div>
-                            <div class="ml-3 text-sm">
-                                <label for="terms"
-                                    class="font-light text-gray-500 dark:text-gray-300">I accept the <a
-                                        class="font-medium text-primary-600 hover:underline dark:text-primary-500"
-                                        href="#">Terms and Conditions</a></label>
-                            </div>
-                        </div>
-                        <button type="submit"
-                            class="w-full text-white bg-gray-900 hover:bg-primary-700 focus:ring-4 focus:outline-none focus:ring-primary-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-primary-600 dark:hover:bg-primary-700 dark:focus:ring-primary-800">Create
-                            an account</button>
+                    <form id="signupForm" class="space-y-4 md:space-y-6">
+                        <!-- ... (sama seperti kode sebelumnya) ... -->
+                        <button type="button"
+                            class="w-full text-white bg-primary-600 hover:bg-primary-700 focus:ring-4 focus:outline-none focus:ring-primary-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-primary-600 dark:hover:bg-primary-700 dark:focus:ring-primary-800"
+                            onclick="signup()">Create an account</button>
                         <p class="text-sm font-light text-gray-500 dark:text-gray-400">
                             Already have an account? <a href="#"
                                 class="font-medium text-primary-600 hover:underline dark:text-primary-500">Login
@@ -78,6 +45,53 @@
             </div>
         </div>
     </section>
+
+    <script>
+        const signupForm = document.getElementById('signupForm');
+
+        function signup() {
+            // Ambil data dari form
+            const email = document.getElementById('email').value;
+            const password = document.getElementById('password').value;
+            const confirmPassword = document.getElementById('confirm-password').value;
+
+            // Validasi sederhana, sesuaikan dengan kebutuhan
+            if (password !== confirmPassword) {
+                alert("Password and Confirm Password do not match.");
+                return;
+            }
+
+            // Data yang akan dikirimkan ke API
+            const data = {
+                email: email,
+                password: password
+            };
+
+            // Kirim request ke API
+            fetch('https://us-central1-bustling-walker-340203.cloudfunctions.net/function-GISSGINUPCOY', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(data),
+            })
+            .then(response => response.json())
+            .then(result => {
+                // Cek apakah signup berhasil
+                if (result.success) {
+                    alert("Signup successful!");
+                    // Redirect ke halaman login
+                    window.location.href = 'halaman-login.html';
+                } else {
+                    alert("Signup failed. Please try again.");
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                alert("An error occurred. Please try again later.");
+            });
+        }
+    </script>
 </body>
 
 </html>
