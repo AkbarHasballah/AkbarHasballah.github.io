@@ -1,43 +1,48 @@
-// Ambil elemen-elemen HTML yang diperlukan
-const usernameInput = document.getElementById("username");
-const passwordInput = document.getElementById("password");
-const submitButton = document.getElementById("submit");
-const registerForm = document.getElementById("registerForm");
-const errorMessage = document.getElementById("error-message");
+// signup.js
 
-// URL API register
-const registerApiUrl = "https://us-central1-bustling-walker-340203.cloudfunctions.net/function-SIGNREGISGISCOY";
+document.addEventListener("DOMContentLoaded", () => {
+    const loginForm = document.getElementById("loginForm");
+    const submitButton = document.getElementById("submit");
+    const loadingMessage = document.getElementById("loading");
+    const errorMessage = document.getElementById("error-message");
 
-// Tambahkan event listener untuk mengirim permintaan saat formulir dikirim
-registerForm.addEventListener("submit", async (event) => {
-    event.preventDefault(); // Mencegah pengiriman form default
+    loginForm.addEventListener("submit", async (event) => {
+        event.preventDefault();
 
-    //Ambil nilai dari input username dan password
-    const username = usernameInput.value;
-    const password = passwordInput.value;
+        const username = document.getElementById("username").value;
+        const password = document.getElementById("password").value;
 
-    //Kirim permintaan POST ke API register
-    try {
-        const response = await fetch(registerApiUrl, {
-            method: "POST",
-            //mode: "no-cors", // Menggunakan mode no-cors
-            headers: {
-                "Content-Type": "application/json",
-            },
-            body: JSON.stringify({ username, password }),
-        });
+        loadingMessage.style.display = "block";
+        errorMessage.textContent = "";
 
-        if (response.ok) {
-            // Pendaftaran berhasil, alihkan ke halaman login.html
-            //window.location.href = "../pages/login.html";
-            window.location.href = "../pages/suksesDaftar.html";
-        } else {
-            // Handle kesalahan jika diperlukan
-            const data = await response.json();
-            //console.error("Gagall mendaftar:", data.message);
-            errorMessage.textContent = data.message; // Menampilkan pesan kesalahan dari API
+        try {
+            const response = await fetch("https://us-central1-bustling-walker-340203.cloudfunctions.net/function-SIGNREGISGISCOY", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                body: JSON.stringify({
+                    username: username,
+                    password: password,
+                }),
+            });
+
+            if (!response.ok) {
+                throw new Error("Login failed. Please check your credentials and try again.");
+            }
+
+            alert("Login successful!");
+            // Redirect to dashboard.html
+            window.location.href = "../dashboard/dashboard.html";
+        } catch (error) {
+            console.error("Error during login:", error);
+            errorMessage.textContent = error.message;
+        } finally {
+            loadingMessage.style.display = "none";
         }
-    } catch (error) {
-        console.error("Terjadi kesalahann:", error);
-    }
+    });
+
+    submitButton.addEventListener("click", () => {
+        loginForm.submit();
+    });
 });
